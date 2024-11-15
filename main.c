@@ -41,6 +41,16 @@ void list_task (task tsk[MAX_LENGTH_LIST], int qtd_task); // listar as tarefas
 void add_task(task list_task[MAX_LENGTH_LIST], int qtd_task); // adicionando tarefa à lista de tarefas
 
 
+// alterando status da tarefa
+
+void change_status (task list[MAX_LENGTH_LIST], char * name_task); // alterando status da tarefa
+
+
+// removendo itens da lista
+
+void remove_task (task list[MAX_LENGTH_LIST], char * name_task);
+
+
 
 // main
 int main () {
@@ -49,6 +59,9 @@ int main () {
     int usr_options;
     task list[MAX_LENGTH_LIST];
     int task_qtd = 0; // quantidade de tarefas já criadas
+
+    // conter nome da tarefa
+    char tmp_name_task[50 + 1];
 
     // mensagem inicial
     welcome();
@@ -169,15 +182,94 @@ int main () {
 
                 break;
             case 3:
+
+                // limpando a tela do terminal
+                clean_screen();
+
+                putchar('\n'); // pulando uma linha
+                puts("========================================");
+                puts("\tALTERANDO STATUS\t");
+                puts("========================================");
+                putchar('\n'); // pulando uma linha
+
+                // capturando nome da tarefa
+                printf("Digite o nome da tarefa: "); fgets(tmp_name_task, sizeof(tmp_name_task), stdin);
+
+                tmp_name_task[strcspn(tmp_name_task, "\n")] = '\0';
+
+                change_status (list, tmp_name_task);
+
                 putchar('\n');
-                puts("Ainda estamos construindo... aguarde!");
-                exit(1); // retornando status 1
+                printf("Deseja voltar ao menu inicial (1- sim, 5- não)? ");
+                // capturando entrada do user e verificando tipo
+                if(scanf("%d", &usr_options) != 1) {
+                    // limpando buffer
+                    clean_buffer();
+                    // limpando tela
+                    clean_screen();
+                    // exibindo mensagem de erro
+                    type_msg_error();
+                    // finalizando programa
+                    byebye();
+                    exit(1);
+                } else if (usr_options != 1) {
+                    // limpando tela
+                    clean_screen();
+                    // finalizando programa
+                    byebye();
+                    exit(1);
+                } else {
+                    // limpando buffer
+                    clean_buffer();
+                    continue;
+                }
+
                 break;
             case 4:
+
+                // limpando a tela do terminal
+                clean_screen();
+
+
+                putchar('\n'); // pulando uma linha
+                puts("========================================");
+                puts("\tREMOVENDO TAREFA\t");
+                puts("========================================");
+                putchar('\n'); // pulando uma linha
+
+
+                // capturando nome da tarefa
+                printf("Digite o nome da tarefa: "); fgets(tmp_name_task, sizeof(tmp_name_task), stdin);
+
+                tmp_name_task[strcspn(tmp_name_task, "\n")] = '\0';
+                
+                
+                remove_task(list, tmp_name_task);
+                task_qtd--;
                 putchar('\n');
-                puts("Ainda estamos construindo... aguarde!");
-                exit(1); // retornando status 1
-                break;
+                printf("Deseja voltar ao menu inicial (1- sim, 5- não)? ");
+                // capturando entrada do user e verificando tipo
+                if(scanf("%d", &usr_options) != 1) {
+                    // limpando buffer
+                    clean_buffer();
+                    // limpando tela
+                    clean_screen();
+                    // exibindo mensagem de erro
+                    type_msg_error();
+                    // finalizando programa
+                    byebye();
+                    exit(1);
+                } else if (usr_options != 1) {
+                    // limpando tela
+                    clean_screen();
+                    // finalizando programa
+                    byebye();
+                    exit(1);
+                } else {
+                    // limpando buffer
+                    clean_buffer();
+                    continue;
+                }
             default:
                 byebye(); // finalizando o programa
                 exit(1); // retornando status 1
@@ -352,4 +444,46 @@ void add_task(task list_task[MAX_LENGTH_LIST], int qtd_task) {
 
     list_task[ qtd_task == 0 ? 0 : qtd_task].name[strcspn(list_task[ qtd_task == 0 ? 0 : qtd_task].name, "\n")] = '\0';
     
+}
+
+
+
+// alterando status da tarefa
+
+void change_status (task list[MAX_LENGTH_LIST], char * name_task) {
+
+    /*
+        Alterando o status da tarefa
+    */
+
+   for (int i = 0; i < MAX_LENGTH_LIST; i++) {
+        if (!strcmp(list[i].name, name_task)) {
+            list[i].status = 1;
+            return;
+        }
+   }
+
+   puts("Nenhuma tarefa encontrada com esse nome... voltando ao menu!");
+
+}
+
+
+
+
+// removendo elementos da lista
+
+void remove_task (task list[MAX_LENGTH_LIST], char * name_task) {
+
+
+    for (int i = 0; i <= MAX_LENGTH_LIST; i++) {
+
+        if (!strcmp(list[i].name, name_task)) {
+            for (int j = i; j <= MAX_LENGTH_LIST; j++) {
+                list[j] = list[j + 1];
+            }
+        }
+
+    }
+
+
 }
