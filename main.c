@@ -36,6 +36,10 @@ int valid_qtd_list (int register_task); // valida se existem tarefas na lista ou
 void list_task (task tsk[MAX_LENGTH_LIST], int qtd_task); // listar as tarefas
 
 
+// adicionando tarefas
+
+void add_task(task list_task[MAX_LENGTH_LIST], int qtd_task); // adicionando tarefa à lista de tarefas
+
 
 
 // main
@@ -44,17 +48,7 @@ int main () {
     // variaveis
     int usr_options;
     task list[MAX_LENGTH_LIST];
-    int task_qtd = 2; // quantidade de tarefas já criadas
-
-
-    // tarefa #1
-    strcpy(list[0].name, "Tarefa Teste #1");
-    list[0].priority = 1;
-    list[0].status = 1;
-    // tarefa #2
-    strcpy(list[1].name, "Tarefa Teste #2");
-    list[1].priority = 10;
-    list[1].status = 0;
+    int task_qtd = 0; // quantidade de tarefas já criadas
 
     // mensagem inicial
     welcome();
@@ -125,9 +119,54 @@ int main () {
                 
                 break;
             case 2:
-                putchar('\n');
-                puts("Ainda estamos construindo... aguarde!");
-                exit(1); // retornando status 1
+
+                // limpando terminal
+                clean_screen();
+
+                putchar('\n'); // pulando uma linha
+                puts("========================================");
+                puts("\tADICIONANDO TAREFAS\t");
+                puts("========================================");
+                putchar('\n'); // pulando uma linha
+
+                if (task_qtd >= MAX_LENGTH_LIST) {
+                    // limpando tela
+                    clean_screen();
+
+                    puts("Não é possível adicionar tarefa!\nNúmero de tarefas máximas atingido, retorne ao menu...");
+
+                    continue;
+                }
+
+                add_task(list, task_qtd);
+                clean_buffer();
+                task_qtd++;
+
+                putchar('\n'); // pulando uma linha
+                printf("Deseja voltar ao menu inicial (1- sim, 5- não)? ");
+                // capturando entrada do user e verificando tipo
+                if(scanf("%d", &usr_options) != 1) {
+                    // limpando buffer
+                    clean_buffer();
+                    // limpando tela
+                    clean_screen();
+                    // exibindo mensagem de erro
+                    type_msg_error();
+                    // finalizando programa
+                    byebye();
+                    exit(1);
+                } else if (usr_options != 1) {
+                    // limpando tela
+                    clean_screen();
+                    // finalizando programa
+                    byebye();
+                    exit(1);
+                } else {
+                    // limpando buffer
+                    clean_buffer();
+                    continue;
+                }
+
                 break;
             case 3:
                 putchar('\n');
@@ -293,4 +332,24 @@ void list_task (task tsk[MAX_LENGTH_LIST], int qtd_task) {
     for (int i = 0; i < qtd_task; i++) {
         printf("%d. [%c] %s - Prioridade: %d \n", i + 1, tsk[i].status == 0 ? ' ' : 'X', tsk[i].name, tsk[i].priority);
     }
+}
+
+
+
+
+// adicionando tarefas
+
+void add_task(task list_task[MAX_LENGTH_LIST], int qtd_task) {
+
+    /*
+        Adicionando tarefa à lista
+    */
+
+    printf("Digite o nome da tarefa: "); fgets(list_task[ qtd_task == 0 ? 0 : qtd_task].name, sizeof(list_task[ qtd_task == 0 ? 0 : qtd_task].name), stdin);
+    putchar('\n');
+    printf("Digite a prioridade da tarefa: "); scanf("%d", &list_task[ qtd_task == 0 ? 0 : qtd_task].priority);
+    list_task[ qtd_task == 0 ? 0 : qtd_task].status = 0;
+
+    list_task[ qtd_task == 0 ? 0 : qtd_task].name[strcspn(list_task[ qtd_task == 0 ? 0 : qtd_task].name, "\n")] = '\0';
+    
 }
