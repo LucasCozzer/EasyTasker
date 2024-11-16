@@ -437,12 +437,12 @@ void add_task(task list_task[MAX_LENGTH_LIST], int qtd_task) {
         Adicionando tarefa à lista
     */
 
-    printf("Digite o nome da tarefa: "); fgets(list_task[ qtd_task == 0 ? 0 : qtd_task].name, sizeof(list_task[ qtd_task == 0 ? 0 : qtd_task].name), stdin);
+    printf("Digite o nome da tarefa: "); fgets(list_task[qtd_task].name, sizeof(list_task[qtd_task].name), stdin);
     putchar('\n');
-    printf("Digite a prioridade da tarefa: "); scanf("%d", &list_task[ qtd_task == 0 ? 0 : qtd_task].priority);
-    list_task[ qtd_task == 0 ? 0 : qtd_task].status = 0;
+    printf("Digite a prioridade da tarefa: "); scanf("%d", &list_task[qtd_task].priority);
+    list_task[qtd_task].status = 0;
 
-    list_task[ qtd_task == 0 ? 0 : qtd_task].name[strcspn(list_task[ qtd_task == 0 ? 0 : qtd_task].name, "\n")] = '\0';
+    list_task[qtd_task].name[strcspn(list_task[qtd_task].name, "\n")] = '\0';
     
 }
 
@@ -475,7 +475,7 @@ void change_status (task list[MAX_LENGTH_LIST], char * name_task) {
 void remove_task (task list[MAX_LENGTH_LIST], char * name_task) {
 
 
-    for (int i = 0; i <= MAX_LENGTH_LIST; i++) {
+    for (int i = 0; i < MAX_LENGTH_LIST; i++) {
 
         if (!strcmp(list[i].name, name_task)) {
             for (int j = i; j <= MAX_LENGTH_LIST; j++) {
